@@ -36,13 +36,13 @@ module Sinatra
               # build up the javascript
               templates = template_paths.map do |(name, path)|
                 content = File.read(path)
-                "HandlebarsTemplates[#{name.inspect}] = Handlebars.compile(#{content.inspect});"
+                "window.HandlebarsTemplates[#{name.inspect}] = Handlebars.compile(#{content.inspect});"
               end
 
               # wrap it up in a closure
               output = %{
                 (function() {
-                  var HandlebarsTemplates = {};
+                  window.HandlebarsTemplates = {};
                   #{templates.join("\n")}
                 })();
               }
