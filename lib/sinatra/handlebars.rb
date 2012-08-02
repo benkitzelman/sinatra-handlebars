@@ -42,7 +42,7 @@ module Sinatra
               # wrap it up in a closure
               output = %{
                 (function() {
-                  HandlebarsTemplates ||= {};
+                  var HandlebarsTemplates = {};
                   #{templates.join("\n")}
                 })();
               }
