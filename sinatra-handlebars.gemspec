@@ -1,4 +1,4 @@
-require './lib/sinatra/ember'
+require './lib/sinatra/handlebars'
 Gem::Specification.new do |s|
   s.name        = 'sinatra-handlebars'
   s.version     = Sinatra::Handlebars.version
