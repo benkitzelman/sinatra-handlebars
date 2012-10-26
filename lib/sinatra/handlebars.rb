@@ -28,7 +28,7 @@ module Sinatra
       def templates_as_javascript(paths)
         template_paths(paths).map do |(name, path)|
           content = File.read(path)
-          if name ~= /^_/
+          if name =~ /^_/
             "Handlebars.registerPartial(#{name.sub(/^_/, '').inspect}, #{content.inspect});"
           else
             "window.HandlebarsTemplates[#{name.inspect}] = Handlebars.compile(#{content.inspect});"
