@@ -9,44 +9,50 @@ module Sinatra
     end
 
     module ClassMethods
-      # set ember options
+      # set handlebars options
       def handlebars(&block)
         @handlebars_options ||= Options.new(self, &block)
         self.handlebars_init! if block_given?
         @handlebars_options
       end
 
+      def js_content(paths)
+        @js_content ||= %{
+          (function() {
+            window.HandlebarsTemplates = {};
+            #{templates_as_javascript(paths).join("\n")}
+          })();
+        }.strip.gsub(/^ {16}/, '')
+      end
+
+      def templates_as_javascript(paths)
+        template_paths(paths).map do |(name, path)|
+          content = File.read(path)
+          if name ~= /^_/
+            "Handlebars.registerPartial(#{name.sub(/^_/, '').inspect}, #{content.inspect});"
+          else
+            "window.HandlebarsTemplates[#{name.inspect}] = Handlebars.compile(#{content.inspect});"
+          end
+        end
+      end
+
+      def template_paths(paths)
+        template_paths = {}
+        paths.each do |path|
+          template_paths[File.basename(path, '.hbs')] = path
+        end
+        template_paths
+      end
+
       def handlebars_init!
         handlebars.template_packages.each do |route, globs|
           get route do
             mtime, output = @template_cache.fetch(route) do
-              # find all the template files
+
               paths = globs.map do |glob|
-                glob = File.expand_path(File.join(settings.root, glob))
+                glob = File.expand_path(glob)
                 Dir[glob].map { |x| x.squeeze('/') }
-              end
-              paths = paths.flatten.uniq
-
-              # build up template hash
-              template_paths = {}
-              paths.each do |path|
-                template_paths[File.basename(path, '.hbs')] = path
-              end
-
-              # build up the javascript
-              templates = template_paths.map do |(name, path)|
-                content = File.read(path)
-                "window.HandlebarsTemplates[#{name.inspect}] = Handlebars.compile(#{content.inspect});"
-              end
-
-              # wrap it up in a closure
-              output = %{
-                (function() {
-                  window.HandlebarsTemplates = {};
-                  #{templates.join("\n")}
-                })();
-              }
-              output = output.strip.gsub(/^ {16}/, '')
+              end.flatten.uniq
 
               # compute the maximum mtime for all paths
               mtime = paths.map do |path|
@@ -55,7 +61,7 @@ module Sinatra
                 end
               end.compact.max
 
-              [mtime, output]
+              [mtime, js_content(paths)]
             end
 
             content_type :js
