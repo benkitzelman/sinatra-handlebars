@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'options')
 module Sinatra
   module Handlebars
     def self.version
-      "0.0.2"
+      "0.0.3"
     end
 
     def self.registered(app)
@@ -46,8 +46,20 @@ module Sinatra
         end
       end
 
+      def vendor_js
+        vendor_js_files.inject('') {|memo, path| memo + File.read(path) }
+      end
+
+      def vendor_js_files
+        Dir[File.join(File.dirname(__FILE__), '../../', 'vendor', '/*.js')]
+      end
+
       def js_content(paths)
         @js_content ||= %{
+          // Vendor Content
+          #{vendor_js}
+          
+          //Templates
           (function() {
             window.HandlebarsTemplates = {};
             #{templates_as_javascript(paths).join("\n")}
