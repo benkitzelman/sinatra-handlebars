@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'options')
 module Sinatra
   module Handlebars
     def self.version
-      "0.0.3"
+      "0.0.4"
     end
 
     def self.registered(app)
