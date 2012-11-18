@@ -6,12 +6,9 @@ Helpers for serving Handlebars.js templates in [Sinatra][sinatra].
 
 
 ## Installation
-### Bundler users
-
-If you use Bundler, add it to your *Gemfile.*
 
 ``` ruby
-gem 'sinatra-handlebars',   git: 'http://github.com/benkitzelman/sinatra-handlebars'
+gem install sinatra-handlebars
 ```
 
 
@@ -36,10 +33,5 @@ Partial template filenames must be prefixed with an '_', and are referenced with
 For example, for the partial template file '_MyPartial.hbs', to render in a parent template it would be referenced as {{> MyPartial}}
 
 
-## Sinatra AssetPack
-If you're using the [sinatra-assetpack][assetpack] gem, add your served templates to a package.
-
-
-[assetpack]: https://github.com/rstacruz/sinatra-assetpack
-[ember]: http://emberjs.com
+[handlebars.js]: http://handlebarsjs.com/
 [sinatra]: http://sinatrarb.com
