@@ -1,5 +1,7 @@
 # Sinatra Handlebars
 
+[![endorse](https://api.coderwall.com/benkitzelman/endorsecount.png)](https://coderwall.com/benkitzelman)
+
 Helpers for serving Handlebars.js templates in [Sinatra][sinatra].
 
 - Pre-compile handlebars templates from separate view files rather than littering them throughout your html.
