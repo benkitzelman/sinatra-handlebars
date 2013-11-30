@@ -35,3 +35,7 @@ For example, for the partial template file '_MyPartial.hbs', to render in a pare
 
 [handlebars.js]: http://handlebarsjs.com/
 [sinatra]: http://sinatrarb.com
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/benkitzelman/sinatra-handlebars/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
